@@ -21,6 +21,87 @@ function typeIcon(type: string): string {
   }
 }
 
+type ViewerNode = GraphViewPayload["nodes"][number];
+type ViewerEdge = GraphViewPayload["edges"][number];
+
+function MetaRow({ label, value }: { label: string; value: unknown }) {
+  if (value == null || value === "") return null;
+
+  if (Array.isArray(value)) {
+    return (
+      <div className="meta-row">
+        <span className="meta-label">{label}</span>
+        <div className="meta-value">
+          {value.map((v, i) => (
+            <span key={i} className="meta-tag">{String(v)}</span>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const str = String(value);
+  const isUrl = str.startsWith("http://") || str.startsWith("https://");
+
+  return (
+    <div className="meta-row">
+      <span className="meta-label">{label}</span>
+      <span className="meta-value">
+        {isUrl ? <a href={str} target="_blank" rel="noopener noreferrer">{str}</a> : str}
+      </span>
+    </div>
+  );
+}
+
+function NodeDetail({ node, edges, nodes }: { node: ViewerNode; edges: ViewerEdge[]; nodes: ViewerNode[] }) {
+  const meta = node.meta ?? {};
+  const metaEntries = Object.entries(meta).filter(
+    ([key]) => !["source_urls_json", "custom_properties_json", "created_at", "updated_at", "id", "external_id"].includes(key)
+  );
+
+  const connectedEdges = edges.filter((e) => e.from === node.id || e.to === node.id);
+  const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+
+  return (
+    <>
+      <div className="detail-header">
+        <span className={`detail-icon ${node.type}`}>{typeIcon(node.type)}</span>
+        <div>
+          <h2>{node.label}</h2>
+          <p className="muted">{node.subtitle ?? node.type}</p>
+        </div>
+      </div>
+
+      {metaEntries.length > 0 && (
+        <div className="meta-section">
+          {metaEntries.map(([key, value]) => (
+            <MetaRow key={key} label={key.replace(/_/g, " ")} value={value} />
+          ))}
+        </div>
+      )}
+
+      {connectedEdges.length > 0 && (
+        <div className="detail-connections">
+          <h3>Connections</h3>
+          <ul className="conn-list">
+            {connectedEdges.map((edge) => {
+              const otherId = edge.from === node.id ? edge.to : edge.from;
+              const other = nodeMap.get(otherId);
+              return (
+                <li key={edge.id}>
+                  <span className="conn-type">{formatEdgeLabel(edge.label ?? edge.type)}</span>
+                  <span className="conn-target">{other?.label ?? otherId}</span>
+                  <span className="conn-strength">{edge.strength.toFixed(2)}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </>
+  );
+}
+
 function EntityCard({ payload }: { payload: CardViewPayload }) {
   return (
     <div className="shell card-shell">
@@ -300,18 +381,7 @@ function GraphExplorer({ payload }: { payload: GraphViewPayload }) {
 
         <aside className="panel detail-panel">
           {selectedNode ? (
-            <>
-              <div className="detail-header">
-                <span className={`detail-icon ${selectedNode.type}`}>{typeIcon(selectedNode.type)}</span>
-                <div>
-                  <h2>{selectedNode.label}</h2>
-                  <p className="muted">{selectedNode.subtitle ?? selectedNode.type}</p>
-                </div>
-              </div>
-              {Object.keys(selectedNode.meta ?? {}).length > 0 && (
-                <pre>{JSON.stringify(selectedNode.meta, null, 2)}</pre>
-              )}
-            </>
+            <NodeDetail node={selectedNode} edges={payload.edges} nodes={payload.nodes} />
           ) : selectedEdge ? (
             <>
               <h2>{formatEdgeLabel(selectedEdge.label ?? selectedEdge.type)}</h2>

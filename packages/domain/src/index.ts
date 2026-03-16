@@ -189,12 +189,21 @@ async function applyEdge(
   return edgeId;
 }
 
+function parseJsonField<T>(value: unknown, fallback: T): T {
+  if (typeof value !== "string") return fallback;
+  try { return JSON.parse(value) as T; } catch { return fallback; }
+}
+
+function compact(obj: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(Object.entries(obj).filter(([, v]) => v != null && v !== "" && v !== "{}"));
+}
+
 async function collectEntitySummaries(
   db: PersonaDatabase,
   refs: Array<{ entity_type: string; id: string }>
-): Promise<Array<{ id: string; entity_type: string; label: string; subtitle?: string }>> {
+): Promise<Array<{ id: string; entity_type: string; label: string; subtitle?: string; meta?: Record<string, unknown> }>> {
   const uniqueRefs = [...new Map(refs.map((ref) => [`${ref.entity_type}:${ref.id}`, ref])).values()];
-  const summaries: Array<{ id: string; entity_type: string; label: string; subtitle?: string }> = [];
+  const summaries: Array<{ id: string; entity_type: string; label: string; subtitle?: string; meta?: Record<string, unknown> }> = [];
 
   for (const ref of uniqueRefs) {
     const table =
@@ -222,21 +231,49 @@ async function collectEntitySummaries(
     }
 
     if (ref.entity_type === "person") {
+      const contactPoints = await db.listContactPoints("person", ref.id);
+      const customProps = parseJsonField<Record<string, unknown>>(row.custom_properties_json, {});
       summaries.push({
         id: ref.id,
         entity_type: "person",
         label: `${row.first_name ?? ""} ${row.last_name ?? ""}`.trim(),
-        subtitle: row.current_role ? String(row.current_role) : undefined
+        subtitle: row.current_role ? String(row.current_role) : undefined,
+        meta: compact({
+          role: row.current_role,
+          company_id: row.current_company_id,
+          lifecycle_stage: row.lifecycle_stage,
+          lead_status: row.lead_status,
+          owner: row.owner_id,
+          last_activity: row.last_activity_at,
+          notes: row.notes,
+          contact_points: contactPoints.length > 0
+            ? contactPoints.map((cp) => `${cp.type}: ${cp.value}`)
+            : undefined,
+          ...customProps
+        })
       });
       continue;
     }
 
     if (ref.entity_type === "company") {
+      const contactPoints = await db.listContactPoints("company", ref.id);
+      const customProps = parseJsonField<Record<string, unknown>>(row.custom_properties_json, {});
       summaries.push({
         id: ref.id,
         entity_type: "company",
         label: String(row.name),
-        subtitle: row.domain ? String(row.domain) : undefined
+        subtitle: row.domain ? String(row.domain) : undefined,
+        meta: compact({
+          domain: row.domain,
+          lifecycle_stage: row.lifecycle_stage,
+          owner: row.owner_id,
+          last_activity: row.last_activity_at,
+          notes: row.notes,
+          contact_points: contactPoints.length > 0
+            ? contactPoints.map((cp) => `${cp.type}: ${cp.value}`)
+            : undefined,
+          ...customProps
+        })
       });
       continue;
     }
@@ -246,7 +283,14 @@ async function collectEntitySummaries(
         id: ref.id,
         entity_type: "interaction",
         label: String(row.summary),
-        subtitle: String(row.type)
+        subtitle: String(row.type),
+        meta: compact({
+          type: row.type,
+          happened_at: row.happened_at,
+          outcome: row.outcome,
+          next_step: row.next_step,
+          snippet: String(row.raw_text ?? "").slice(0, 300) || undefined
+        })
       });
       continue;
     }
@@ -256,7 +300,13 @@ async function collectEntitySummaries(
         id: ref.id,
         entity_type: "task",
         label: String(row.title),
-        subtitle: String(row.status)
+        subtitle: String(row.status),
+        meta: compact({
+          status: row.status,
+          priority: row.priority,
+          due_at: row.due_at,
+          body: row.body
+        })
       });
       continue;
     }
@@ -266,7 +316,14 @@ async function collectEntitySummaries(
         id: ref.id,
         entity_type: "opportunity",
         label: String(row.title),
-        subtitle: String(row.stage)
+        subtitle: String(row.stage),
+        meta: compact({
+          stage: row.stage,
+          status: row.status,
+          value: row.value,
+          company_id: row.company_id,
+          notes: row.notes
+        })
       });
       continue;
     }
@@ -275,7 +332,14 @@ async function collectEntitySummaries(
       id: ref.id,
       entity_type: "lead",
       label: String(row.source_name),
-      subtitle: String(row.source_type)
+      subtitle: String(row.source_type),
+      meta: compact({
+        source_type: row.source_type,
+        source_url: row.source_url,
+        utm_source: row.utm_source,
+        utm_campaign: row.utm_campaign,
+        captured_at: row.captured_at
+      })
     });
   }
 
@@ -1074,7 +1138,7 @@ export class PersonaService {
         focusId: id,
         entities: summaries.map((summary) => ({
           ...summary,
-          meta: {}
+          meta: summary.meta ?? {}
         })),
         edges: neighborhood.edges as never[],
         evidence: evidence.map((item) => ({
