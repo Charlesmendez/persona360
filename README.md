@@ -1,8 +1,15 @@
 # persona360
 
-The CRM your AI can run.
+The open source AI-native CRM built on relationships, not fields
 
-`persona360` is an agent-first CRM for people, companies, stages, and relationships. Your AI can read it, update it, and act on it from the CLI.
+A CLI-first, open source CRM that turns conversations, intros, and activity into structured relationship intelligence.
+
+It captures people, companies, interactions, intros, and opportunities as a living graph.
+
+- It turns real interactions into structured relationship intelligence.
+- It updates contact and company context from conversations, not manual data entry.
+- It helps you manage who knows who, what matters, and what should happen next.
+- It stores your network the way it actually works: connected, dynamic, and contextual.
 
 ## Visuals
 
