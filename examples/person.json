@@ -1,0 +1,21 @@
+{
+  "external_id": "person:sarah@acme.com",
+  "first_name": "Sarah",
+  "last_name": "Kim",
+  "current_company_id": "company_123",
+  "current_role": "Head of Partnerships",
+  "contact_points": [
+    {
+      "type": "email",
+      "value": "sarah@acme.com"
+    },
+    {
+      "type": "phone",
+      "value": "+1-555-0101"
+    }
+  ],
+  "source_urls": [],
+  "custom_properties": {
+    "region": "north-america"
+  }
+}

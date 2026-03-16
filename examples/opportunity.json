@@ -1,0 +1,10 @@
+{
+  "title": "Acme Pilot",
+  "company_id": "company_123",
+  "person_ids": [
+    "person_123"
+  ],
+  "stage": "new",
+  "status": "open",
+  "notes": "Pilot interest from the first meeting."
+}

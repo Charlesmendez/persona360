@@ -1,0 +1,13 @@
+{
+  "type": "meeting",
+  "happened_at": "2026-03-15T18:00:00Z",
+  "summary": "Intro meeting with Sarah",
+  "raw_text": "Met Sarah from Acme. They want to explore a pilot next quarter.",
+  "person_ids": [
+    "person_123"
+  ],
+  "company_ids": [
+    "company_123"
+  ],
+  "opportunity_ids": []
+}

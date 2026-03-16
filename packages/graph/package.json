@@ -1,0 +1,15 @@
+{
+  "name": "@persona360/graph",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/graph/src/index.js",
+  "types": "dist/graph/src/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@persona360/contracts": "workspace:*"
+  }
+}

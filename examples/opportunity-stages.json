@@ -1,0 +1,27 @@
+[
+  {
+    "key": "new",
+    "label": "New",
+    "sort_order": 1
+  },
+  {
+    "key": "qualified",
+    "label": "Qualified",
+    "sort_order": 2
+  },
+  {
+    "key": "proposal",
+    "label": "Proposal",
+    "sort_order": 3
+  },
+  {
+    "key": "won",
+    "label": "Won",
+    "sort_order": 4
+  },
+  {
+    "key": "lost",
+    "label": "Lost",
+    "sort_order": 5
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "baseUrl": ".",
+    "paths": {
+      "@persona360/contracts": ["packages/contracts/src"],
+      "@persona360/db": ["packages/db/src"],
+      "@persona360/domain": ["packages/domain/src"],
+      "@persona360/graph": ["packages/graph/src"],
+      "@persona360/ai": ["packages/ai/src"]
+    },
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "sourceMap": true
+  }
+}

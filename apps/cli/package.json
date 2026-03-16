@@ -1,0 +1,26 @@
+{
+  "name": "@persona360/cli",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/apps/cli/src/index.js",
+  "types": "dist/apps/cli/src/index.d.ts",
+  "bin": {
+    "persona": "dist/apps/cli/src/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@persona360/ai": "workspace:*",
+    "@persona360/contracts": "workspace:*",
+    "@persona360/db": "workspace:*",
+    "@persona360/domain": "workspace:*",
+    "@persona360/graph": "workspace:*",
+    "commander": "^14.0.3",
+    "csv-parse": "^6.1.0",
+    "open": "^11.0.0"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "persona360",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CLI-first AI-native relationship memory graph.",
+  "scripts": {
+    "setup:native": "pnpm approve-builds --all && pnpm rebuild better-sqlite3 esbuild",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "persona": "node apps/cli/dist/apps/cli/src/index.js",
+    "dev:cli": "pnpm --filter @persona360/cli dev",
+    "dev:viewer": "pnpm --filter @persona360/viewer dev"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "esbuild": "^0.27.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  }
+}
