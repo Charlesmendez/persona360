@@ -10,6 +10,10 @@ The CRM your AI can run.
 
 ![Persona360 profile view](./persona2.png)
 
+![Persona360 node detail](./persona%203.png)
+
+![Persona360 graph explorer](./persona%204.png)
+
 The product shape is:
 
 - source-backed records
