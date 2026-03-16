@@ -1,15 +1,25 @@
 # persona360
 
-The open source AI-native CRM built on relationships, not fields
+The open source AI-native CRM that turns emails, meetings, and notes into structured relationships
 
-A CLI-first, open source CRM that turns conversations, intros, and activity into structured relationship intelligence.
+Persona360 moves away from field based records and focuses on conversations. Every interaction becomes a source of structured knowledge. Conversations are captured and translated into connections, context, and evolving information.
 
-It captures people, companies, interactions, intros, and opportunities as a living graph.
+Instead of only storing data, the system records how information emerges through dialogue and how relationships form over time. This allows AI to understand not just what is known about someone, but how that knowledge was created and how people are connected.
 
-- It turns real interactions into structured relationship intelligence.
-- It updates contact and company context from conversations, not manual data entry.
-- It helps you manage who knows who, what matters, and what should happen next.
-- It stores your network the way it actually works: connected, dynamic, and contextual.
+We need a new class of CRM that turns conversations into context. A system that stores not only a person’s profile, but also their relationships and how those relationships formed.
+
+For example:
+	•	Who introduced this person?
+	•	How did I meet them?
+	•	How did they arrive at my site?
+
+If AI systems understand these relationships, they gain deeper context. That is how humans understand networks.
+
+Persona360 is built around that idea.
+	•	It turns real interactions into structured relationship intelligence.
+	•	It updates contact and company context from conversations, not manual data entry.
+	•	It helps manage who knows who, what matters, and what should happen next.
+	•	It stores your network the way it actually works: connected, dynamic, and contextual.
 
 ## Visuals
 
