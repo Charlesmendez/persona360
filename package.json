@@ -4,7 +4,7 @@
   "private": true,
   "description": "CLI-first AI-native relationship memory graph.",
   "scripts": {
-    "setup:native": "pnpm approve-builds --all && pnpm rebuild better-sqlite3 esbuild",
+    "setup:native": "node scripts/setup-native.mjs",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
