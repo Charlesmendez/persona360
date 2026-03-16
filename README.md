@@ -36,6 +36,20 @@ Why `setup:native` exists:
 - `better-sqlite3` is the default local database driver
 - pnpm 10 may require explicit approval for native build scripts
 
+If your `pnpm` is older and complains about `approve-builds --all`, use one of these fixes:
+
+```bash
+pnpm add -g pnpm@latest
+pnpm setup:native
+```
+
+Or:
+
+```bash
+pnpm install --dangerously-allow-all-builds
+pnpm rebuild better-sqlite3 esbuild
+```
+
 The default database is a local SQLite file at `.persona360/persona.db`.
 
 To use Postgres instead:
